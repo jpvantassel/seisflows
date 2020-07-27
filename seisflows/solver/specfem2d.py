@@ -208,7 +208,8 @@ class specfem2d(custom_import('solver', 'base')):
         # regular traces and 'adjoint' traces
         if PAR.FORMAT in ['SU', 'su']:
             files = glob('traces/adj/*.su')
-            unix.rename('.su', '.su.adj', files)
+            # unix.rename('.su', '.su.adj', files)
+            unix.rename('_%s.su' % PAR.DTYPE, '.su.adj', files)
 
         call_solver(system.mpiexec(), 'bin/xmeshfem2D')
         call_solver(system.mpiexec(), 'bin/xspecfem2D')
