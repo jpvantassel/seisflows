@@ -232,7 +232,7 @@ class specfem2d(custom_import('solver', 'base')):
             if PAR.FORMAT in ['SU', 'su']:
                 filenames = []
                 for channel in PAR.CHANNELS:
-                    filenames += ['U%s_file_single_%s.su' % channel PAR.DTYPE]
+                    filenames += ['U%s_file_single_%s.su' % (channel, PAR.DTYPE)]
                 return filenames
         else:
             unix.cd(self.cwd)
