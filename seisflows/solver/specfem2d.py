@@ -149,10 +149,10 @@ class specfem2d(custom_import('solver', 'base')):
         if PAR.FORMAT in ['SU', 'su']:
             unix.cd(self.cwd + '/' + 'traces/adj')
             for channel in ['x', 'y', 'z', 'p']:
-                src = 'U%s_file_single_%s.su.adj' % (PAR.CHANNELS[0], PAR.DTYPE)
-                if not exists(src):
-                    print('Source %s does not exist' % src)
-                    src = 'U%s_file_single.su.adj' % PAR.CHANNELS[0]
+                # src = 'U%s_file_single_%s.su.adj' % (PAR.CHANNELS[0], PAR.DTYPE)
+                # if not exists(src):
+                #     print('Source %s does not exist' % src)
+                src = 'U%s_file_single.su.adj' % PAR.CHANNELS[0]
 
                 dst = 'U%s_file_single.su.adj' % channel
                 if not exists(dst):
@@ -216,8 +216,11 @@ class specfem2d(custom_import('solver', 'base')):
         # regular traces and 'adjoint' traces
         if PAR.FORMAT in ['SU', 'su']:
             files = glob('traces/adj/*.su')
-            # unix.rename('.su', '.su.adj', files)
-            unix.rename('_%s.su' % PAR.DTYPE, '.su.adj', files)
+            
+            print 'traces/adj/'
+            print files
+            unix.rename('.su', '.su.adj', files)
+            # unix.rename('_%s.su' % PAR.DTYPE, '.su.adj', files)
 
         call_solver(system.mpiexec(), 'bin/xmeshfem2D')
         call_solver(system.mpiexec(), 'bin/xspecfem2D')
