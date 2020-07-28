@@ -191,10 +191,12 @@ class specfem2d(custom_import('solver', 'base')):
 
         if PAR.FORMAT in ['SU', 'su']:
             filenames = glob('OUTPUT_FILES/*.su')
+            print filenames
             # work around SPECFEM2D's different file names (depending on the
             # version used :
             unix.rename('single_%s.su' % PAR.DTYPE, 'single.su', filenames)
             filenames = glob('OUTPUT_FILES/*.su')
+            print filenames
             unix.mv(filenames, path)
 
     def adjoint(self):
