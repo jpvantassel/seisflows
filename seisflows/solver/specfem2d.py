@@ -148,7 +148,7 @@ class specfem2d(custom_import('solver', 'base')):
         if PAR.FORMAT in ['SU', 'su']:
             unix.cd(self.cwd + '/' + 'traces/adj')
             for channel in ['x', 'y', 'z', 'p']:
-                src = 'U%s_file_single.su.adj' % PAR.CHANNELS[0]
+                src = 'U%s_file_single_%s.su.adj' % (PAR.CHANNELS[0], PAR.DTYPE)
                 dst = 'U%s_file_single.su.adj' % channel
                 if not exists(dst):
                     unix.cp(src, dst)
