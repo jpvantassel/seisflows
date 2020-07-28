@@ -126,8 +126,8 @@ class specfem2d(custom_import('solver', 'base')):
             # work around SPECFEM2D's different file names (depending on the
             # version used :
             # Generalize this to change any dtype!
-            unix.rename('single_%s.su' % PAR.DTYPE, 'single.su', src)
-            src = glob('OUTPUT_FILES/*.su')
+            # unix.rename('single_%s.su' % PAR.DTYPE, 'single.su', src)
+            # src = glob('OUTPUT_FILES/*.su')
             dst = 'traces/obs'
             unix.mv(src, dst)
 
@@ -149,7 +149,7 @@ class specfem2d(custom_import('solver', 'base')):
             unix.cd(self.cwd + '/' + 'traces/adj')
             for channel in ['x', 'y', 'z', 'p']:
                 src = 'U%s_file_single_%s.su.adj' % (PAR.CHANNELS[0], PAR.DTYPE)
-                dst = 'U%s_file_single.su.adj' % channel
+                dst = 'U%s_file_single_%s.su.adj' % (channel, PAR.DTYPE)
                 if not exists(dst):
                     unix.cp(src, dst)
 
@@ -191,12 +191,12 @@ class specfem2d(custom_import('solver', 'base')):
 
         if PAR.FORMAT in ['SU', 'su']:
             filenames = glob('OUTPUT_FILES/*.su')
-            print filenames
+            # print filenames
             # work around SPECFEM2D's different file names (depending on the
             # version used :
-            unix.rename('single_%s.su' % PAR.DTYPE, 'single.su', filenames)
-            filenames = glob('OUTPUT_FILES/*.su')
-            print filenames
+            # unix.rename('single_%s.su' % PAR.DTYPE, 'single.su' % PAR.DTYPE, filenames)
+            # filenames = glob('OUTPUT_FILES/*.su')
+            # print filenames
             unix.mv(filenames, path)
 
     def adjoint(self):
@@ -235,14 +235,14 @@ class specfem2d(custom_import('solver', 'base')):
             if PAR.FORMAT in ['SU', 'su']:
                 filenames = []
                 for channel in PAR.CHANNELS:
-                    filenames += ['U%s_file_single.su' % channel]
+                    filenames += ['U%s_file_single_%s.su' % (channel, PAR.DTYPE)]
                 return filenames
         else:
             unix.cd(self.cwd)
             unix.cd('traces/obs')
 
             if PAR.FORMAT in ['SU', 'su']:
-                return glob('U?_file_single.su')
+                return glob('U?_file_single_%s.su' % PAR.DTYPE)
 
     @property
     def model_databases(self):
