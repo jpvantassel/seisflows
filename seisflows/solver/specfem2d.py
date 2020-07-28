@@ -125,13 +125,14 @@ class specfem2d(custom_import('solver', 'base')):
             src = glob('OUTPUT_FILES/*.su')
             # work around SPECFEM2D's different file names (depending on the
             # version used :
-            # Generalize this to change any dtype!
-            # unix.rename('single_%s.su' % PAR.DTYPE, 'single.su', src)
-            # src = glob('OUTPUT_FILES/*.su')
+            unix.rename('single_%s.su' % PAR.DTYPE, 'single.su', src)
+            src = glob('OUTPUT_FILES/*.su')
+
             dst = 'traces/obs'
             unix.mv(src, dst)
 
         if PAR.SAVETRACES:
+            print 'Saving traces ... '
             self.export_traces(PATH.OUTPUT+'/'+'traces/obs')
 
     def initialize_adjoint_traces(self):
@@ -198,8 +199,8 @@ class specfem2d(custom_import('solver', 'base')):
             # print filenames
             # work around SPECFEM2D's different file names (depending on the
             # version used :
-            # unix.rename('single_%s.su' % PAR.DTYPE, 'single.su' % PAR.DTYPE, filenames)
-            # filenames = glob('OUTPUT_FILES/*.su')
+            unix.rename('single_%s.su' % PAR.DTYPE, 'single.su', filenames)
+            filenames = glob('OUTPUT_FILES/*.su')
             # print filenames
             unix.mv(filenames, path)
 
@@ -240,14 +241,14 @@ class specfem2d(custom_import('solver', 'base')):
             if PAR.FORMAT in ['SU', 'su']:
                 filenames = []
                 for channel in PAR.CHANNELS:
-                    filenames += ['U%s_file_single_%s.su' % (channel, PAR.DTYPE)]
+                    filenames += ['U%s_file_single.su' % channel]
                 return filenames
         else:
             unix.cd(self.cwd)
             unix.cd('traces/obs')
 
             if PAR.FORMAT in ['SU', 'su']:
-                return glob('U?_file_single_%s.su' % PAR.DTYPE)
+                return glob('U?_file_single.su')
 
     @property
     def model_databases(self):
