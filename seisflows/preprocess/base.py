@@ -94,6 +94,7 @@ class base(object):
         solver = sys.modules['seisflows_solver']
 
         for filename in solver.data_filenames:
+            print filename
             obs = self.reader(path+'/'+'traces/obs', filename)
             syn = self.reader(path+'/'+'traces/syn', filename)
 
