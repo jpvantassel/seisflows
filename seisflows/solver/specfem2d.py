@@ -125,7 +125,8 @@ class specfem2d(custom_import('solver', 'base')):
             src = glob('OUTPUT_FILES/*.su')
             # work around SPECFEM2D's different file names (depending on the
             # version used :
-            unix.rename('single_p.su', 'single.su', src)
+            # Generalize this to change any dtype!
+            unix.rename('single_%s.su' % PAR.DTYPE, 'single.su', src)
             src = glob('OUTPUT_FILES/*.su')
             dst = 'traces/obs'
             unix.mv(src, dst)
@@ -192,7 +193,7 @@ class specfem2d(custom_import('solver', 'base')):
             filenames = glob('OUTPUT_FILES/*.su')
             # work around SPECFEM2D's different file names (depending on the
             # version used :
-            unix.rename('single_p.su', 'single.su', filenames)
+            unix.rename('single_%s.su' % PAR.DTYPE, 'single.su', filenames)
             filenames = glob('OUTPUT_FILES/*.su')
             unix.mv(filenames, path)
 
@@ -208,8 +209,7 @@ class specfem2d(custom_import('solver', 'base')):
         # regular traces and 'adjoint' traces
         if PAR.FORMAT in ['SU', 'su']:
             files = glob('traces/adj/*.su')
-            # unix.rename('.su', '.su.adj', files)
-            unix.rename('_%s.su' % PAR.DTYPE, '.su.adj', files)
+            unix.rename('.su', '.su.adj', files)
 
         call_solver(system.mpiexec(), 'bin/xmeshfem2D')
         call_solver(system.mpiexec(), 'bin/xspecfem2D')
@@ -233,7 +233,7 @@ class specfem2d(custom_import('solver', 'base')):
             if PAR.FORMAT in ['SU', 'su']:
                 filenames = []
                 for channel in PAR.CHANNELS:
-                    filenames += ['U%s_file_single_%s.su' % (channel, PAR.DTYPE)]
+                    filenames += ['U%s_file_single.su' % channel]
                 return filenames
         else:
             unix.cd(self.cwd)
